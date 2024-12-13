@@ -1,0 +1,39 @@
+.my-radio-btn {
+    display: flex;
+    align-items: center;
+    margin-bottom: 11px;
+}
+.my-radio-btn__old {
+    display: none;
+}
+.my-radio-btn__new {
+    width: 12px;
+    height: 12px;
+    border: 1px solid #FFF;
+    border-radius: 2px;
+    margin-right: 10px;
+    position: relative;
+    margin-right: 10px;
+    overflow: hidden;
+}
+.my-radio-btn__new::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #FFF;
+    position: absolute;
+    top: 0;
+    transform: scale(0);
+    transition: transform 0.2s ease;
+}
+
+.my-radio-btn__old:checked + .my-radio-btn__new::before {
+    transform: scale(1);
+}
+.my-radio-btn__text {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: -0.02em;
+}
