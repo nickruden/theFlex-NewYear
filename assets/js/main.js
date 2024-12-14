@@ -4,6 +4,9 @@ let selectedImageSrc = null;
 let designSwiper;
 let textSwiper;
 
+let certificateValue = 0;
+let nominalValue = 0;
+
 const inputs = {
     design: document.getElementById('designInput'),
     text: document.getElementById('textCardInput'),
@@ -300,10 +303,16 @@ document.addEventListener('DOMContentLoaded', function () {
         priceInput.value = +price;
         sessionStorage.setItem('priceValue', priceInput.value);
 
-        document.getElementById('certificate-value').textContent = `${price}₽`;
+        certificateValue = +price;
+        nominalValue = +price + bonusPrice;
+
+        document.getElementById('certificate-value').textContent = `${certificateValue}₽`;
         document.getElementById('bonuses-value').textContent = `+${bonusPrice}₽`;
-        document.getElementById('your-certificate-value').textContent = `${+price + +bonusPrice}₽`;
-        document.getElementById('total-value').textContent = `${price}₽`;
+        document.getElementById('your-certificate-value').textContent = `${nominalValue}₽`;
+        document.getElementById('total-value').textContent = `${certificateValue}₽`;
+
+        sessionStorage.setItem('certificateValue', certificateValue);
+        sessionStorage.setItem('nominalValue', nominalValue);
     }
 
     let senderFormData = {
@@ -421,11 +430,38 @@ const fillFinalForm = () => {
 
     for (const key in inputs) {
         const finalInput = finalForm.querySelector(`[name="final${capitalize(key)}"]`);
-        if (key == 'senderReceivingType') {
-            finalInput.value = inputs[key].id;
+        if (key === 'senderReceivingType') {
+            finalInput.value = inputs[key]?.id || '';
         } else if (finalInput) {
             finalInput.value = inputs[key].value;
         }
+    }
+
+    // Подставляем выбранную картинку и текст в final-page__card
+    const finalCard = document.querySelector('.final-page__card');
+    if (finalCard) {
+        const cardImg = finalCard.querySelector('.final-page__card-img');
+        const cardTitle = finalCard.querySelector('.final-page__card-title');
+
+        if (cardImg) {
+            cardImg.src = selectedImageSrc || './assets/images/design-page/slide-img-2.png';
+        }
+
+        if (cardTitle) {
+            cardTitle.textContent = inputs.text.value || '';
+        }
+    }
+
+    const button = document.querySelector('.final-page__button');
+    if (button) {
+        const certificateValue = sessionStorage.getItem('certificateValue') || 0;
+        const nominalValue = sessionStorage.getItem('nominalValue') || 0;
+
+        // Формируем ссылку
+        const link = `#order:Сертификат ${certificateValue}=${nominalValue}`;
+        button.setAttribute('href', link);
+
+        console.log(button)
     }
 
     console.log('Значения успешно подставлены в финальную форму');

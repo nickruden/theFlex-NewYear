@@ -1,4 +1,5 @@
 .my-button {
+    display: block;
     width: 217px;
     height: 46px;
     font-size: 12px;

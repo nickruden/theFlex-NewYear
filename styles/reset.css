@@ -174,9 +174,15 @@ button {
     }
 }
 
+
+
 .my-input.invalid {
     border-color: red;
-    box-shadow: 0 0 5px red
+    box-shadow: 0 0 5px red;
+}
+
+.my-input.invalid::placeholder {
+    color: red;
 }
 
 .validation-field {
