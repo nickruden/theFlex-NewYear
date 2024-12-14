@@ -781,6 +781,7 @@
     object-fit: cover;
 }
 .final-page__card-title {
+    font-style: italic;
     font-size: 31px;
     line-height: 90%;
     letter-spacing: -.02em;
