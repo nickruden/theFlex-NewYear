@@ -5,9 +5,9 @@ let designSwiper;
 let textSwiper;
 
 const inputs = {
-    price: document.getElementById('priceInput'),
     design: document.getElementById('designInput'),
     text: document.getElementById('textCardInput'),
+    price: document.getElementById('priceInput'),
     senderName: document.getElementById('senderName'),
     senderEmail: document.getElementById('senderEmail'),
     senderCity: document.getElementById('senderCity'),
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentStep = sessionStorage.getItem('currentStep') || 0;
     console.log(currentStep)
 
-    // функция для показа любого внутреннего блока
+    // функция для показа внутреннего блока
     function showBlock(block) {
         contentBlocks.forEach(b => b.style.display = 'none'); // скрываем все внутренние страницы
 
@@ -186,12 +186,12 @@ document.addEventListener('DOMContentLoaded', function () {
         
         if (block.classList.contains('data-page-one')) {
             initSenderForm();
-            console.log(senderFormData);
         }
 
         if (block.classList.contains('data-page-two')) {
             initRecipientForm();
             console.log(recipientFormData);
+            inputs.senderReceivingType = document.querySelector('input[name="senderReceivingType"]:checked');
         }
     }
 
@@ -217,6 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // переход к loading-page и затем к final-page
             innerPage.style.display = 'none';
             loadingPage.style.display = 'block';
+            fillFinalForm();
             setTimeout(() => {
                 loadingPage.style.display = 'none';
                 finalPage.style.display = 'block';
@@ -239,6 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("переход к слайду(назад):", sessionStorage.getItem('activeSlideIndex'))
             } else if (currentStep === 2) {
                 const savedPrice = sessionStorage.getItem('priceValue');
+                console.log(1, savedPrice)
                 updatePrice(savedPrice);
                 const priceButtons = document.querySelectorAll('.amount-page__price-button');
                 priceButtons.forEach(button => {
@@ -285,9 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 priceButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
                 selectedPrice = button.getAttribute('data-price');
-                priceInput.value = selectedPrice;
-                sessionStorage.setItem('priceValue', priceInput.value);
-                console.log(selectedPrice)
+                console.log(priceInput.value)
                 updatePrice(selectedPrice);
             });
         });
@@ -295,6 +295,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updatePrice(price) {
         const bonusPrice = 2000;
+        console.log(2, price)
+
+        priceInput.value = +price;
+        sessionStorage.setItem('priceValue', priceInput.value);
 
         document.getElementById('certificate-value').textContent = `${price}₽`;
         document.getElementById('bonuses-value').textContent = `+${bonusPrice}₽`;
@@ -324,8 +328,6 @@ document.addEventListener('DOMContentLoaded', function () {
             senderFormData.senderEmail = form.querySelector('#senderEmail').value;
             senderFormData.senderCity = form.querySelector('#senderCity').value;
             senderFormData.senderReceivingType = form.querySelector('input[name="senderReceivingType"]:checked')?.id || '';
-    
-            // Сохраняем данные в sessionStorage
             sessionStorage.setItem('senderFormData', JSON.stringify(senderFormData));
         }
     
@@ -334,20 +336,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const savedFormData = sessionStorage.getItem('senderFormData');
             if (savedFormData) {
                 senderFormData = JSON.parse(savedFormData);
-    
-                // Заполняем поля формы
+
                 form.querySelector('#senderName').value = senderFormData.senderName;
                 form.querySelector('#senderEmail').value = senderFormData.senderEmail;
                 form.querySelector('#senderCity').value = senderFormData.senderCity;
-    
-                // Устанавливаем выбранный тип получения
+
                 if (senderFormData.senderReceivingType) {
                     form.querySelector(`#${senderFormData.senderReceivingType}`).checked = true;
                 }
             }
         }
     
-        // Настройка обработчиков событий
         form.addEventListener('input', function (event) {
             if (event.target.id === 'senderName' || event.target.id === 'senderEmail') {
                 saveFormData();
@@ -360,7 +359,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     
-        // Восстанавливаем данные при инициализации
         restoreFormData();
     }
     
@@ -407,6 +405,31 @@ document.addEventListener('DOMContentLoaded', function () {
         restoreFormData();
     }
 });
+
+// Функция для подстановки значений в финальную форму
+const fillFinalForm = () => {
+    const finalForm = document.getElementById('finalForm');
+
+    if (!finalForm) {
+        console.error('Финальная форма не найдена');
+        return;
+    }
+
+    const capitalize = (str) => {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+
+    for (const key in inputs) {
+        const finalInput = finalForm.querySelector(`[name="final${capitalize(key)}"]`);
+        if (key == 'senderReceivingType') {
+            finalInput.value = inputs[key].id;
+        } else if (finalInput) {
+            finalInput.value = inputs[key].value;
+        }
+    }
+
+    console.log('Значения успешно подставлены в финальную форму');
+};
 
 window.addEventListener('beforeunload', function () {
     sessionStorage.clear();

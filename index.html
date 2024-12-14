@@ -213,10 +213,7 @@
                                 </div>
                             </div>
                             <div class="amount-page" style="display: none;">
-                                <!-- Input для сохранения выбранной цены -->
                                 <input type="text" name="priceInput" id="priceInput" class="amount-page__price-input">
-                            
-                                <!-- Блок с ценами -->
                                 <div class="amount-page__prices">
                                     <div class="amount-page__price-buttons">
                                         <button class="amount-page__price-button" data-price="5000">
@@ -231,8 +228,6 @@
                                     </div>
                                     <div class="amount-page__price-text">Отлично! Мы начислим новогодние бонусы <br> от The Flex и увеличим номинал сертификата бесплатно</div>
                                 </div>
-                            
-                                <!-- Блок с описаниями -->
                                 <div class="amount-page__descriptions">
                                     <div class="amount-page__description">
                                         <div class="amount-page__description-item">
@@ -357,6 +352,18 @@
                     <div class="final-page__text">После оплаты сертификат будет отправлен на ваш email. <br> Если вы выбрали вариант
                         получения сертификата <br> в студии – с вами свяжется менеджер The Flex</div>
                 </div>
+                <form id="finalForm">
+                    <input type="hidden" id="finalDesign" name="finalDesign">
+                    <input type="hidden" id="finalText" name="finalText">
+                    <input type="hidden" id="finalPrice" name="finalPrice">
+                    <input type="hidden" id="finalSenderName" name="finalSenderName">
+                    <input type="hidden" id="finalSenderEmail" name="finalSenderEmail">
+                    <input type="hidden" id="finalSenderCity" name="finalSenderCity">
+                    <input type="hidden" id="finalSenderReceivingType" name="finalSenderReceivingType">
+                    <input type="hidden" id="finalRecipientName" name="finalRecipientName">
+                    <input type="hidden" id="finalRecipientPhone" name="finalRecipientPhone">
+                    <input type="hidden" id="finalRecipientCity" name="finalRecipientCity">
+                </form>
             </div>
         </main>
     </div>
