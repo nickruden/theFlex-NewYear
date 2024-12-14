@@ -30,7 +30,7 @@
             </div>
         </header>
         <main class="main">
-            <div class="main-page" style="display: none;">
+            <div class="main-page">
                 <div class="my-container main-page__container">
                     <div class="main-page__title">Hey, flexgirl</div>
                     <div class="main-page__texts">
@@ -40,7 +40,7 @@
                             сертификата</p>
                     </div>
                     <div class="main-page__buttons">
-                        <button class="my-button next-button main-page__button">
+                        <button class="my-button main-page__button">
                             <div class="my-button__inner-background">нажми, если готова начать</div>
                         </button>
                     </div>
@@ -344,7 +344,7 @@
                     </div>
                 </div>
             </div>
-            <div class="final-page">
+            <div class="final-page" style="display: none;">
                 <div class="my-container final-page__container">
                     <div class="final-page__card">
                         <div class="final-page__card-wrap-img">
@@ -364,36 +364,10 @@
     </div>
 
     <script src="./assets/libs/swiper.min.js"></script>
+    
 
-    <script>
-        const designSwiper = new Swiper(".design__swiper", {
-            direction: 'horizontal',
-            slidesPerView: 1,
-            spaceBetween: 7,
-            initialSlide: 1,
-            pagination: {
-                el: '.design__swiper-paginaton',
-            },
-            navigation: {
-                nextEl: '.design__swiper-button-next',
-                prevEl: '.design__swiper-button-prev',
-            },
-        })
+    <script src="./assets/js/main.js"></script>
 
-        const textPageSwiper = new Swiper(".text-page__swiper", {
-            direction: 'horizontal',
-            slidesPerView: 1,
-            spaceBetween: 20,
-            initialSlide: 1,
-            pagination: {
-                el: '.text-page__swiper-paginaton',
-            },
-            navigation: {
-                nextEl: '.text-page__swiper-button-next',
-                prevEl: '.text-page__swiper-button-prev',
-            },
-        })
-    </script>
 </body>
 
 </html>
