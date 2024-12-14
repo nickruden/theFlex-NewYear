@@ -66,36 +66,19 @@ const selectDesign = () => {
 };
 
 
-// Initialize textSwiper with event listener
 textSwiper = new Swiper(".text-page__swiper", {
     direction: 'horizontal',    
     slidesPerView: 1,
     spaceBetween: 20,
-    initialSlide: sessionStorage.getItem('activeTextSlideIndex') ? parseInt(sessionStorage.getItem('activeTextSlideIndex')) : 0,
+    initialSlide: 1,
     pagination: {
-        el: '.text-page__swiper-pagination',
+        el: '.text-page__swiper-paginaton',
     },
     navigation: {
         nextEl: '.text-page__swiper-button-next',
         prevEl: '.text-page__swiper-button-prev',
     },
-    on: {
-        slideChange: function () {
-            updateTextTitle();
-            sessionStorage.setItem('activeTextSlideIndex', this.realIndex);
-        }
-    }
 });
-
-// Function to update the text in the card title
-function updateTextTitle() {
-    const activeSlide = textSwiper.slides[textSwiper.realIndex];
-    const textContent = activeSlide.querySelector('.slide-text-content').textContent; // Adjust selector as needed
-    document.querySelector('.text-page__card-title').textContent = textContent;
-}
-
-// Initialize text title with the current active slide's text
-updateTextTitle();
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -159,13 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (selectedImageSrc) {
                 cardImg.src = selectedImageSrc;
             }
-
-            const savedSlideIndex = sessionStorage.getItem('activeTextSlideIndex');
-            if (savedSlideIndex !== null) {
-                textSwiper.slideTo(parseInt(savedSlideIndex), 0, false);
-            }
-            updateTextTitle();
-
         }
 
         if (block.classList.contains('amount-page')) {
