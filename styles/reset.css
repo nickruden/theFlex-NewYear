@@ -8,40 +8,31 @@
     box-sizing: border-box;
 }
 
-/* @font-face {
+
+@font-face {
     font-family: "Suisseinl-Book";  
-    src: url("../fonts/suisseintl-book.ttf") format("truetype"); 
+    src: url("../assets/fonts/Suisseinl-Book/SuisseIntl-Book.otf") format("opentype"),
+    url("../assets/fonts/Suisseinl-Book/_SuisseIntl-Book.otf") format("opentype"); 
+    font-style: normal; 
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Suisseinl-Book";  
+    src: url("../assets/fonts/Suisseinl-Book/SuisseIntl-Regular.otf") format("opentype"),
+    url("../assets/fonts/Suisseinl-Book/_SuisseIntl-Regular.otf") format("opentype"); 
     font-style: normal; 
     font-weight: 400;
 }
 
 @font-face {
-    font-family: 'MyCustomFont';
-    src: url('fonts/MyCustomFont-Regular.woff2') format('woff2');
+    font-family: "PPEditorialNew";  
+    src: url("../assets/fonts/PPEditorialNew/PPEditorialNew-Italic.otf") format("opentype"),
+    url("../assets/fonts/PPEditorialNew/_PPEditorialNew-Italic.otf") format("opentype"); 
+    font-style: italic; 
     font-weight: 400;
-    font-style: normal;
 }
 
-@font-face {
-    font-family: 'MyCustomFont';
-    src: url('fonts/MyCustomFont-Medium.woff2') format('woff2');
-    font-weight: 500;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "HeadingNow";  
-    src: url("../fonts/HeadingNow-35Medium.otf") format("truetype"); 
-    font-style: normal; 
-    font-weight: 500;
-}
-
-@font-face {
-    font-family: "Manrope";  
-    src: url("../fonts/Manrope-Medium.ttf") format("truetype"); 
-    font-style: normal; 
-    font-weight: 500;
-} */
 
 html,
 body {
@@ -174,9 +165,8 @@ button {
     }
 }
 
-
-
 .my-input.invalid {
+    color: red;
     border-color: red;
     box-shadow: 0 0 5px red;
 }

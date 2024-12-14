@@ -159,6 +159,7 @@
 }
 .inner-page__title {
     font-size: 25px;
+    font-weight: 500;
     line-height: 30px;
     letter-spacing: -.06em;
     text-align: center;
@@ -323,6 +324,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'PPEditorialNew';
     font-size: 12px;
     line-height: 14px;
     letter-spacing: -.02em;
@@ -362,6 +364,7 @@
     object-fit: cover;
 }
 .text-page__card-title {
+    font-family: 'PPEditorialNew';
     font-size: 25px;
     font-style: italic;
     line-height: 90%;
@@ -389,7 +392,7 @@
         font-size: 24px;
         top: 48px;
         left: 24px;
-        max-width: 117px;
+        max-width: 130px;
     }
 }
 
@@ -458,6 +461,7 @@
     height: 100%;
     width: 100%;
     font-size: 20px;
+    font-weight: 500;
     line-height: 106%;
     color: #000;
     background: #FAFAFA;
@@ -512,7 +516,7 @@
 
 @media (max-height: 700px) {
     .amount-page {
-        padding: 62px 0px 58px 0px;
+        padding: 62px 0px 48px 0px;
     }
 }
 
@@ -522,7 +526,7 @@
 
 @media (max-height: 550px) {
     .amount-page {
-        padding: 40px 0px 34px 0px;
+        padding: 40px 0px 28px 0px;
     }
     .amount-page__prices {
         margin-bottom: 31px;
@@ -549,11 +553,13 @@
 }
 .data-page-one__title-text {
     font-size: 16px;
+    font-weight: 500;
     line-height: 25px;
     letter-spacing: -.06em;
 }
 .data-page-one__title-number {
     font-size: 14px;
+    font-weight: 500;
     line-height: 25px;
     letter-spacing: -.06em;
     color: #9C9C9C;
@@ -607,11 +613,13 @@
 }
 .data-page-two__title-text {
     font-size: 16px;
+    font-weight: 500;
     line-height: 25px;
     letter-spacing: -.06em;
 }
 .data-page-two__title-number {
     font-size: 14px;
+    font-weight: 500;
     line-height: 25px;
     letter-spacing: -.06em;
     color: #9C9C9C;
@@ -657,6 +665,7 @@
 }
 .loading-page__title {
     font-size: 25px;
+    font-weight: 500;
     line-height: 30px;
     letter-spacing: -.06em;
     text-align: center;
@@ -776,8 +785,8 @@
     letter-spacing: -.02em;
     position: absolute;
     top: 59px;
-    left: 42px;
-    max-width: 161px;
+    left: 34px;
+    max-width: 189px;
 }
 .final-page__buttons {
     margin-bottom: 23px;
@@ -819,8 +828,8 @@
     .final-page__card-title {
         font-size: 27px;
         top: 51px;
-        left: 39px;
-        max-width: 140px;
+        left: 28px;
+        max-width: 165px;
     }
 }
 
@@ -845,8 +854,8 @@
     .final-page__card-title {
         font-size: 24px;
         top: 41px;
-        left: 32px;
-        max-width: 127px;
+        left: 22px;
+        max-width: 147px;
     }
     .final-page__buttons {
         margin-bottom: 16px;
