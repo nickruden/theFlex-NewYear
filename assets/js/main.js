@@ -66,19 +66,52 @@ const selectDesign = () => {
 };
 
 
-textSwiper = new Swiper(".text-page__swiper", {
-    direction: 'horizontal',    
-    slidesPerView: 1,
-    spaceBetween: 20,
-    initialSlide: 1,
-    pagination: {
-        el: '.text-page__swiper-paginaton',
-    },
-    navigation: {
-        nextEl: '.text-page__swiper-button-next',
-        prevEl: '.text-page__swiper-button-prev',
-    },
-});
+const initTextSwiper = () => {
+    console.log("инит textSwiper");
+
+    if (textSwiper) {
+        textSwiper.destroy(true, true);
+        console.log("textSwiper уничтожен");
+    }
+
+    textSwiper = new Swiper(".text-page__swiper", {
+        direction: 'horizontal',
+        slidesPerView: 1,
+        spaceBetween: 20,
+        pagination: {
+            el: '.text-page__swiper-pagination',
+        },
+        navigation: {
+            nextEl: '.text-page__swiper-button-next',
+            prevEl: '.text-page__swiper-button-prev',
+        },
+        on: {
+            slideChangeTransitionEnd: selectText // Вызываем функцию при смене слайда
+        }
+    });
+
+    // Устанавливаем активный слайд из sessionStorage
+    textSwiper.slideTo(sessionStorage.getItem('activeTextSlideIndex') || 1, 0);
+    console.log("сохранённый индекс текста:", sessionStorage.getItem('activeTextSlideIndex'));
+
+    selectText(); // Вызываем функцию для обновления текста
+};
+
+const selectText = () => {
+    const activeSlide = document.querySelector('.text-page__swiper-slide.swiper-slide-active');
+    const dataText = activeSlide.querySelector('.text-page__slide-text').textContent.trim(); // Получаем текст из атрибута data-text
+
+    const textInput = document.getElementById('textCardInput');
+    textInput.value = dataText;
+
+    const cardTitle = document.querySelector('.text-page__card-title');
+    cardTitle.textContent = dataText; 
+
+    console.log('Сохраненный текст:', dataText);
+
+    sessionStorage.setItem('activeTextSlideIndex', textSwiper.realIndex); // Сохраняем индекс активного слайда
+    console.log("сохранённый индекс текста:", sessionStorage.getItem('activeTextSlideIndex'));
+};;
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -142,6 +175,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (selectedImageSrc) {
                 cardImg.src = selectedImageSrc;
             }
+
+            initTextSwiper();
         }
 
         if (block.classList.contains('amount-page')) {
