@@ -1,30 +1,102 @@
-const designSwiper = new Swiper(".design__swiper", {
-    direction: 'horizontal',
-    slidesPerView: 1,
-    spaceBetween: 7,
-    initialSlide: 1,
-    pagination: {
-        el: '.design__swiper-paginaton',
-    },
-    navigation: {
-        nextEl: '.design__swiper-button-next',
-        prevEl: '.design__swiper-button-prev',
-    },
-})
+let selectedDesign = null;
+let selectedImageSrc = null;
 
-const textPageSwiper = new Swiper(".text-page__swiper", {
-    direction: 'horizontal',
+let designSwiper;
+let textSwiper;
+
+const inputs = {
+    price: document.getElementById('priceInput'),
+    design: document.getElementById('designInput'),
+    text: document.getElementById('textCardInput'),
+    senderName: document.getElementById('senderName'),
+    senderEmail: document.getElementById('senderEmail'),
+    senderCity: document.getElementById('senderCity'),
+    senderReceivingType: document.querySelector('input[name="senderReceivingType"]:checked'),
+    recipientName: document.getElementById('recipientName'),
+    recipientPhone: document.getElementById('recipientPhone'),
+    recipientCity: document.getElementById('recipientCity'),
+};
+
+
+const initDesignSwiper = () => {
+    console.log("инитсвипер");
+    
+    if (designSwiper) {
+        designSwiper.destroy(true, true);
+        console.log("дестрой")
+    }
+
+    designSwiper = new Swiper(".design__swiper", {
+        direction: 'horizontal',
+        slidesPerView: 1,
+        spaceBetween: 7,
+        initialSlide: 1,
+        pagination: {
+            el: '.design__swiper-paginaton',
+        },
+        navigation: {
+            nextEl: '.design__swiper-button-next',
+            prevEl: '.design__swiper-button-prev',
+        },
+        on: {
+            slideChangeTransitionEnd: selectDesign // вызываем функцию при смене слайда
+        }
+    });
+
+    designSwiper.slideTo(sessionStorage.getItem('activeSlideIndex') - 1 || 0, 0);
+    console.log("сохранённый индекс:", sessionStorage.getItem('activeSlideIndex'))
+
+    selectDesign();
+};
+
+
+const selectDesign = () => {
+    const activeSlide = document.querySelector('.design__swiper-slide.swiper-slide-active');
+    const dataDesign = activeSlide.getAttribute('data-design');
+
+    const designInput = document.getElementById('designInput');
+    designInput.value = dataDesign;
+
+    const slideImg = activeSlide.querySelector('.design__slide-img');
+    selectedImageSrc = slideImg.src;
+    console.log('Сохраненный дизайн:', designInput.value, 'Сохраненная картинка:', selectedImageSrc);
+
+    sessionStorage.setItem('activeSlideIndex', dataDesign);
+    console.log("сохранённый индекс:", sessionStorage.getItem('activeSlideIndex'))
+};
+
+
+// Initialize textSwiper with event listener
+textSwiper = new Swiper(".text-page__swiper", {
+    direction: 'horizontal',    
     slidesPerView: 1,
     spaceBetween: 20,
-    initialSlide: 1,
+    initialSlide: sessionStorage.getItem('activeTextSlideIndex') ? parseInt(sessionStorage.getItem('activeTextSlideIndex')) : 0,
     pagination: {
-        el: '.text-page__swiper-paginaton',
+        el: '.text-page__swiper-pagination',
     },
     navigation: {
         nextEl: '.text-page__swiper-button-next',
         prevEl: '.text-page__swiper-button-prev',
     },
-})
+    on: {
+        slideChange: function () {
+            updateTextTitle();
+            sessionStorage.setItem('activeTextSlideIndex', this.realIndex);
+        }
+    }
+});
+
+// Function to update the text in the card title
+function updateTextTitle() {
+    const activeSlide = textSwiper.slides[textSwiper.realIndex];
+    const textContent = activeSlide.querySelector('.slide-text-content').textContent; // Adjust selector as needed
+    document.querySelector('.text-page__card-title').textContent = textContent;
+}
+
+// Initialize text title with the current active slide's text
+updateTextTitle();
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const mainPage = document.querySelector('.main-page');
@@ -50,13 +122,66 @@ document.addEventListener('DOMContentLoaded', function () {
         'data-page-two': 'Введите данные'
     };
 
-    let currentStep = 0;
+    const background = {
+        main: 'linear-gradient(155deg, #181818 17%, #9B68BF)',
+        final: 'linear-gradient(180deg, #181818 18%, #9B68BF)',
+        default: '#181818'
+    };
+    
+    function setBackground(page) {
+        const wrapper = document.querySelector('.wrapper');
+        if (wrapper) {
+            wrapper.style.background = background[page] || background.default;
+        }
+    }
+
+    let currentStep = sessionStorage.getItem('currentStep') || 0;
+    console.log(currentStep)
 
     // функция для показа любого внутреннего блока
     function showBlock(block) {
         contentBlocks.forEach(b => b.style.display = 'none'); // скрываем все внутренние страницы
+
         block.style.display = 'flex';
         title.textContent = pageTitles[block.classList[0]]; // ставим нужный заголовок
+
+        if (block.classList.contains('main-page')) {
+            setBackground('main');
+        } else if (block.classList.contains('final-page')) {
+            setBackground('final');
+        } else {
+            setBackground('default');
+        }
+
+        if (block.classList.contains('text-page')) {
+            console.log(sessionStorage.getItem('activeSlideIndex'))
+            const cardImg = block.querySelector('.text-page__card-img');
+            if (selectedImageSrc) {
+                cardImg.src = selectedImageSrc;
+            }
+
+            const savedSlideIndex = sessionStorage.getItem('activeTextSlideIndex');
+            if (savedSlideIndex !== null) {
+                textSwiper.slideTo(parseInt(savedSlideIndex), 0, false);
+            }
+            updateTextTitle();
+
+        }
+
+        if (block.classList.contains('amount-page')) {
+            initPriceButtons();
+        }
+
+        
+        if (block.classList.contains('data-page-one')) {
+            initSenderForm();
+            console.log(senderFormData);
+        }
+
+        if (block.classList.contains('data-page-two')) {
+            initRecipientForm();
+            console.log(recipientFormData);
+        }
     }
 
     // обработчик для кнопки на главной странице
@@ -64,6 +189,9 @@ document.addEventListener('DOMContentLoaded', function () {
         mainPage.style.display = 'none';
         innerPage.style.display = 'block'; 
         showBlock(contentBlocks[0]);
+        initDesignSwiper();
+        currentStep = 0;
+        sessionStorage.setItem('currentStep', currentStep);
     });
 
     // обработчик для кнопки "далее"
@@ -72,6 +200,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // переходим к следующему шагу
             currentStep++;
             showBlock(contentBlocks[currentStep]);
+            sessionStorage.setItem('currentStep', currentStep);
+            console.log(currentStep)
         } else {
             // переход к loading-page и затем к final-page
             innerPage.style.display = 'none';
@@ -79,6 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => {
                 loadingPage.style.display = 'none';
                 finalPage.style.display = 'block';
+                setBackground('final');
             }, 2000); // задержка для имитации загрузки
         }
     });
@@ -89,12 +220,183 @@ document.addEventListener('DOMContentLoaded', function () {
             // переходим к предыдущему шагу
             currentStep--;
             showBlock(contentBlocks[currentStep]);
+            console.log(currentStep)
+
+            // если возвращаемся на design-page, восстанавливаем активный слайд
+            if (currentStep === 0) {
+                designSwiper.slideTo(sessionStorage.getItem('activeSlideIndex') - 1 || 0, 0);
+                console.log("переход к слайду(назад):", sessionStorage.getItem('activeSlideIndex'))
+            } else if (currentStep === 2) {
+                const savedPrice = sessionStorage.getItem('priceValue');
+                updatePrice(savedPrice);
+                const priceButtons = document.querySelectorAll('.amount-page__price-button');
+                priceButtons.forEach(button => {
+                    if (button.getAttribute('data-price') === savedPrice) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+            }
         } else {
             // возвращаемся на главную страницу
             innerPage.style.display = 'none';
-            mainPage.style.display = 'block';
+            mainPage.style.display = 'flex';
+            sessionStorage.clear();
+            setBackground('main');
         }
     });
 
-    showBlock(contentBlocks[0]);
+    // инициализация переключения цен
+    function initPriceButtons() {
+        const priceButtons = document.querySelectorAll('.amount-page__price-button');
+        const priceInput = document.getElementById('priceInput');
+        let selectedPrice;
+
+        if (sessionStorage.getItem('priceValue')) {
+            const savedPrice = sessionStorage.getItem('priceValue');
+            updatePrice(savedPrice);
+            const priceButtons = document.querySelectorAll('.amount-page__price-button');
+            priceButtons.forEach(button => {
+                if (button.getAttribute('data-price') === savedPrice) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+        } else {
+            updatePrice(priceButtons[0].getAttribute('data-price'));
+            priceButtons[0].classList.add('active');
+        }
+
+        priceButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                priceButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                selectedPrice = button.getAttribute('data-price');
+                priceInput.value = selectedPrice;
+                sessionStorage.setItem('priceValue', priceInput.value);
+                console.log(selectedPrice)
+                updatePrice(selectedPrice);
+            });
+        });
+    }
+
+    function updatePrice(price) {
+        const bonusPrice = 2000;
+
+        document.getElementById('certificate-value').textContent = `${price}₽`;
+        document.getElementById('bonuses-value').textContent = `+${bonusPrice}₽`;
+        document.getElementById('your-certificate-value').textContent = `${+price + +bonusPrice}₽`;
+        document.getElementById('total-value').textContent = `${price}₽`;
+    }
+
+    let senderFormData = {
+        senderName: '',
+        senderEmail: '',
+        senderCity: '',
+        senderReceivingType: '',
+    };
+    
+    let recipientFormData = {
+        recipientName: '',
+        recipientPhone: '',
+        recipientCity: '',
+    };
+    
+    function initSenderForm() {
+        const form = document.querySelector('.data-page-one__form');
+    
+        // Функция для сохранения данных формы
+        function saveFormData() {
+            senderFormData.senderName = form.querySelector('#senderName').value;
+            senderFormData.senderEmail = form.querySelector('#senderEmail').value;
+            senderFormData.senderCity = form.querySelector('#senderCity').value;
+            senderFormData.senderReceivingType = form.querySelector('input[name="senderReceivingType"]:checked')?.id || '';
+    
+            // Сохраняем данные в sessionStorage
+            sessionStorage.setItem('senderFormData', JSON.stringify(senderFormData));
+        }
+    
+        // Функция для восстановления данных формы
+        function restoreFormData() {
+            const savedFormData = sessionStorage.getItem('senderFormData');
+            if (savedFormData) {
+                senderFormData = JSON.parse(savedFormData);
+    
+                // Заполняем поля формы
+                form.querySelector('#senderName').value = senderFormData.senderName;
+                form.querySelector('#senderEmail').value = senderFormData.senderEmail;
+                form.querySelector('#senderCity').value = senderFormData.senderCity;
+    
+                // Устанавливаем выбранный тип получения
+                if (senderFormData.senderReceivingType) {
+                    form.querySelector(`#${senderFormData.senderReceivingType}`).checked = true;
+                }
+            }
+        }
+    
+        // Настройка обработчиков событий
+        form.addEventListener('input', function (event) {
+            if (event.target.id === 'senderName' || event.target.id === 'senderEmail') {
+                saveFormData();
+            }
+        });
+    
+        form.addEventListener('change', function (event) {
+            if (event.target.id === 'senderCity' || event.target.name === 'senderReceivingType') {
+                saveFormData();
+            }
+        });
+    
+        // Восстанавливаем данные при инициализации
+        restoreFormData();
+    }
+    
+    function initRecipientForm() {
+        const form = document.querySelector('.data-page-two__form');
+    
+        // Функция для сохранения данных формы
+        function saveFormData() {
+            recipientFormData.recipientName = form.querySelector('#recipientName').value;
+            recipientFormData.recipientPhone = form.querySelector('#recipientPhone').value;
+            recipientFormData.recipientCity = form.querySelector('#recipientCity').value;
+    
+            // Сохраняем данные в sessionStorage
+            sessionStorage.setItem('recipientFormData', JSON.stringify(recipientFormData));
+        }
+    
+        // Функция для восстановления данных формы
+        function restoreFormData() {
+            const savedFormData = sessionStorage.getItem('recipientFormData');
+            if (savedFormData) {
+                recipientFormData = JSON.parse(savedFormData);
+    
+                // Заполняем поля формы
+                form.querySelector('#recipientName').value = recipientFormData.recipientName;
+                form.querySelector('#recipientPhone').value = recipientFormData.recipientPhone;
+                form.querySelector('#recipientCity').value = recipientFormData.recipientCity;
+            }
+        }
+    
+        // Настройка обработчиков событий
+        form.addEventListener('input', function (event) {
+            if (event.target.id === 'recipientName' || event.target.id === 'recipientPhone') {
+                saveFormData();
+            }
+        });
+    
+        form.addEventListener('change', function (event) {
+            if (event.target.id === 'recipientCity') {
+                saveFormData();
+            }
+        });
+    
+        // Восстанавливаем данные при инициализации
+        restoreFormData();
+    }
+});
+
+window.addEventListener('beforeunload', function () {
+    sessionStorage.clear();
 });
