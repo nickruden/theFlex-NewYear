@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <div class="wrapper">
+    <div class="wrapper" style="background: linear-gradient(155deg, #181818 17%, #9B68BF);">
         <header class="header">
             <div class="my-container header__container">
                 <a href="" class="header__logo-link">
@@ -30,6 +30,30 @@
             </div>
         </header>
         <main class="main">
+            <div class="main-page" style="display: none;">
+                <div class="my-container main-page__container">
+                    <div class="main-page__title">Hey, flexgirl</div>
+                    <div class="main-page__texts">
+                        <p class="main-page__pre-title">Ты можешь создать подарочный сертификат <br> с классным дизайном для мамы или
+                            подруги</p>
+                        <p class="main-page__text">В подарок мы начислим дополнительные бонусы от the flex <br> и увеличим номинал
+                            сертификата</p>
+                    </div>
+                    <div class="main-page__buttons">
+                        <button class="my-button next-button main-page__button">
+                            <div class="my-button__inner-background">нажми, если готова начать</div>
+                        </button>
+                    </div>
+                </div>
+                <div class="page-img__wrap float-animation">
+                    <img src="./assets/images/main-page/page-img.png" alt="" class="page-img__img">
+                </div>
+                <div class="page-img__background-images">
+                    <img src="./assets/images/main-page/star-1.png" alt="" class="main-page__background-img-1 float-animation">
+                    <img src="./assets/images/main-page/star-2.png" alt="" class="main-page__background-img-2 float-animation">
+                    <img src="./assets/images/main-page/star-3.png" alt="" class="main-page__background-img-3 float-animation">
+                </div>
+            </div>
             <div class="inner-page" style="display: none;">
                 <div class="my-container inner-page__container">
                     <div class="inner-page__body">
@@ -312,12 +336,28 @@
                     </div>
                 </div>
             </div>
-            <div class="loading-page">
+            <div class="loading-page" style="display: none;">
                 <div class="my-container loading-page__container">
                     <div class="loading-page__title">Происходит магия</div>
                     <div class="loading-page__img-wrap float-animation">
                         <img src="./assets/images/loading-page/loading-img.png" alt="" class="loading-page__img">
                     </div>
+                </div>
+            </div>
+            <div class="final-page">
+                <div class="my-container final-page__container">
+                    <div class="final-page__card">
+                        <div class="final-page__card-wrap-img">
+                            <img src="./assets/images/design-page/slide-img-2.png" alt="" class="final-page__card-img">
+                        </div>
+                    </div>
+                    <div class="final-page__buttons">
+                        <button class="my-button final-page__button">
+                            <div class="my-button__inner-background">перейти к оплате</div>
+                        </button>
+                    </div>
+                    <div class="final-page__text">После оплаты сертификат будет отправлен на ваш email. <br> Если вы выбрали вариант
+                        получения сертификата <br> в студии – с вами свяжется менеджер The Flex</div>
                 </div>
             </div>
         </main>
