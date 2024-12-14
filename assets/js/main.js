@@ -66,6 +66,15 @@ const selectDesign = () => {
 
     sessionStorage.setItem('activeSlideIndex', dataDesign);
     console.log("сохранённый индекс:", sessionStorage.getItem('activeSlideIndex'))
+
+    const cardTitle = document.querySelector('.text-page__card-title');
+    const finalCardTitle = document.querySelector('.final-page__card-title');
+    if (dataDesign === '1') {
+        cardTitle.style.color = '#4C4B4B';
+        finalCardTitle.style.color = '#4C4B4B';
+    } else {
+        cardTitle.style.color = '';
+    }
 };
 
 
