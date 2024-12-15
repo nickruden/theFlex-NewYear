@@ -310,7 +310,6 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => {
                 loadingPage.style.display = 'none';
                 finalPage.style.display = 'block';
-                console.log(inputs)
                 setBackground('final');
             }, 2000); // задержка для имитации загрузки
         }
@@ -540,6 +539,7 @@ const fillFinalForm = () => {
         if (key === 'senderReceivingTypeStudio' || key === 'senderReceivingTypeEmail') {
             finalInput.checked = inputs[key].checked; 
             finalInput.value = inputs[key].value;
+            console.log(inputs[key].checked)
         } else if (finalInput) {
             finalInput.value = inputs[key].value;
         }
