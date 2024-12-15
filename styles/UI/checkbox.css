@@ -1,0 +1,48 @@
+/* Основной стиль для чекбокса */
+.my-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 11px;
+    cursor: pointer;
+}
+
+.my-checkbox__old {
+    display: none;
+}
+
+.my-checkbox__new {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border: 1px solid #FFF; 
+    border-radius: 2px;
+    margin-right: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.2s ease;
+}
+
+.my-checkbox__old:checked + .my-checkbox__new {
+    background-color: #FFF;
+}
+
+.my-checkbox__old:checked + .my-checkbox__new::before {
+    content: '';
+    width: 6px;
+    height: 10px;
+    border: solid #000;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    position: absolute;
+    top: -2px;
+    left: 2px;
+    transition: transform 0.2s ease;
+}
+
+.my-checkbox__text {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: -0.02em;
+    color: #FFF;
+}

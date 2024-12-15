@@ -14,10 +14,54 @@ const inputs = {
     senderName: document.getElementById('senderName'),
     senderEmail: document.getElementById('senderEmail'),
     senderCity: document.getElementById('senderCity'),
-    senderReceivingType: document.querySelector('input[name="senderReceivingType"]:checked'),
+    senderReceivingTypeStudio: document.getElementById('receivingStudio'),
+    senderReceivingTypeEmail: document.getElementById('receivingEmail'),
     recipientName: document.getElementById('recipientName'),
     recipientPhone: document.getElementById('recipientPhone'),
     recipientCity: document.getElementById('recipientCity'),
+};
+
+const initPhoneMask = (phoneInput) => {
+    const initialMask = '+7 (';
+
+    // Обработчик фокуса
+    phoneInput.addEventListener('focus', () => {
+        if (phoneInput.value === initialMask) {
+            phoneInput.value = ''; // Очищаем поле, если оно содержит только маску
+        }
+        if (phoneInput.value === '') {
+            phoneInput.value = initialMask; // Устанавливаем маску, если поле пустое
+        }
+    });
+
+    // Обработчик потери фокуса
+    phoneInput.addEventListener('blur', () => {
+        if (phoneInput.value.trim() === '' || phoneInput.value === initialMask) {
+            phoneInput.value = ''; // Очищаем поле, если оно пустое или содержит только маску
+        }
+    });
+
+    // Обработчик ввода
+    phoneInput.addEventListener('input', (event) => {
+        let value = event.target.value.replace(/\D/g, ''); // Убираем все нецифровые символы
+        let formattedValue = '';
+
+        // Форматируем значение в соответствии с маской
+        if (value.length > 0) {
+            formattedValue = '+7 (' + value.substring(1, 4); // Добавляем "+7 ("
+        }
+        if (value.length > 4) {
+            formattedValue += ') ' + value.substring(4, 7); // Добавляем ") "
+        }
+        if (value.length > 7) {
+            formattedValue += '-' + value.substring(7, 9); // Добавляем первый дефис
+        }
+        if (value.length > 9) {
+            formattedValue += '-' + value.substring(9, 11); // Добавляем второй дефис
+        }
+
+        event.target.value = formattedValue; // Устанавливаем отформатированное значение
+    });
 };
 
 
@@ -198,12 +242,34 @@ document.addEventListener('DOMContentLoaded', function () {
         
         if (block.classList.contains('data-page-one')) {
             initSenderForm();
+            for (const key in inputs) {
+                const input = inputs[key];
+                if (!input) continue;
+                input.addEventListener('input', () => {
+                    validateField(input);
+                });
+            }
+
+            inputs.senderReceivingTypeStudio.addEventListener('change', checkCheckboxes);
+            inputs.senderReceivingTypeEmail.addEventListener('change', checkCheckboxes);
         }
 
         if (block.classList.contains('data-page-two')) {
             initRecipientForm();
             console.log(recipientFormData);
-            inputs.senderReceivingType = document.querySelector('input[name="senderReceivingType"]:checked');
+
+            for (const key in inputs) {
+                const input = inputs[key];
+                if (!input) continue;
+                input.addEventListener('input', () => {
+                    validateField(input);
+                });
+            }
+
+            const phoneInput = document.getElementById('recipientPhone');
+            if (phoneInput) {
+                initPhoneMask(phoneInput);
+            }
         }
     }
 
@@ -220,19 +286,31 @@ document.addEventListener('DOMContentLoaded', function () {
     // обработчик для кнопки "далее"
     nextButton.addEventListener('click', function () {
         if (currentStep < contentBlocks.length - 1) {
+            if (currentStep === 3) {
+                if (!validateSenderFields()) {
+                    return;
+                }
+            }
+            
             // переходим к следующему шагу
             currentStep++;
             showBlock(contentBlocks[currentStep]);
             sessionStorage.setItem('currentStep', currentStep);
-            console.log(currentStep)
+            console.log(currentStep);
+
         } else {
             // переход к loading-page и затем к final-page
+            console.log(validateRecipientFields())
+            if (!validateRecipientFields()) {
+                return;
+            }
             innerPage.style.display = 'none';
             loadingPage.style.display = 'block';
             fillFinalForm();
             setTimeout(() => {
                 loadingPage.style.display = 'none';
                 finalPage.style.display = 'block';
+                console.log(inputs)
                 setBackground('final');
             }, 2000); // задержка для имитации загрузки
         }
@@ -306,20 +384,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updatePrice(price) {
-        const bonusPrice = 2000;
-        console.log(2, price)
-
+        const bonusMap = {
+            '5000': 2000,
+            '7000': 3000,
+            '10000': 5000
+        };
+    
+        const bonusPrice = bonusMap[price];
+    
         priceInput.value = +price;
         sessionStorage.setItem('priceValue', priceInput.value);
-
+    
         certificateValue = +price;
         nominalValue = +price + bonusPrice;
-
-        document.getElementById('certificate-value').textContent = `${certificateValue}₽`;
-        document.getElementById('bonuses-value').textContent = `+${bonusPrice}₽`;
-        document.getElementById('your-certificate-value').textContent = `${nominalValue}₽`;
-        document.getElementById('total-value').textContent = `${certificateValue}₽`;
-
+    
+        document.getElementById('certificate-value').textContent = `${formatNumber(certificateValue)}₽`;
+        document.getElementById('bonuses-value').textContent = `+${formatNumber(bonusPrice)}₽`;
+        document.getElementById('your-certificate-value').textContent = `${formatNumber(nominalValue)}₽`;
+        document.getElementById('total-value').textContent = `${formatNumber(certificateValue)}₽`;
+    
         sessionStorage.setItem('certificateValue', certificateValue);
         sessionStorage.setItem('nominalValue', nominalValue);
     }
@@ -328,7 +411,8 @@ document.addEventListener('DOMContentLoaded', function () {
         senderName: '',
         senderEmail: '',
         senderCity: '',
-        senderReceivingType: '',
+        senderReceivingTypeStudio: '',
+        senderReceivingTypeEmail: '',
     };
     
     let recipientFormData = {
@@ -345,7 +429,8 @@ document.addEventListener('DOMContentLoaded', function () {
             senderFormData.senderName = form.querySelector('#senderName').value;
             senderFormData.senderEmail = form.querySelector('#senderEmail').value;
             senderFormData.senderCity = form.querySelector('#senderCity').value;
-            senderFormData.senderReceivingType = form.querySelector('input[name="senderReceivingType"]:checked')?.id || '';
+            senderFormData.senderReceivingTypeStudio = inputs.senderReceivingTypeStudio.checked;
+            senderFormData.senderReceivingTypeEmail = inputs.senderReceivingTypeEmail.checked;
             sessionStorage.setItem('senderFormData', JSON.stringify(senderFormData));
         }
     
@@ -359,9 +444,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 form.querySelector('#senderEmail').value = senderFormData.senderEmail;
                 form.querySelector('#senderCity').value = senderFormData.senderCity;
 
-                if (senderFormData.senderReceivingType) {
-                    form.querySelector(`#${senderFormData.senderReceivingType}`).checked = true;
-                }
+                inputs.senderReceivingTypeStudio.checked = senderFormData.senderReceivingTypeStudio || false;
+                inputs.senderReceivingTypeEmail.checked = senderFormData.senderReceivingTypeEmail || false;
             }
         }
     
@@ -372,7 +456,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     
         form.addEventListener('change', function (event) {
-            if (event.target.id === 'senderCity' || event.target.name === 'senderReceivingType') {
+            if (event.target.id === 'senderCity' || event.target.name === 'senderReceivingTypeStudio' || event.target.name === 'senderReceivingTypeEmail') {
                 saveFormData();
             }
         });
@@ -424,6 +508,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+function checkCheckboxes() {
+    if (!inputs.senderReceivingTypeStudio.checked && !inputs.senderReceivingTypeEmail.checked) {
+        document.querySelector(".data-page-one__checkbox-error").innerHTML = 'Не выбран способ получения сертификата!';
+        document.querySelector(".data-page-one__checkbox-error").style.display = 'block';
+        inputs.senderReceivingTypeStudio.parentElement.classList.add('invalid');
+        inputs.senderReceivingTypeEmail.parentElement.classList.add('invalid');
+    } else {
+        document.querySelector(".data-page-one__checkbox-error").style.display = 'none';
+        inputs.senderReceivingTypeStudio.parentElement.classList.remove('invalid');
+        inputs.senderReceivingTypeEmail.parentElement.classList.remove('invalid');
+    }
+}
+
 // Функция для подстановки значений в финальную форму
 const fillFinalForm = () => {
     const finalForm = document.getElementById('finalForm');
@@ -439,8 +536,10 @@ const fillFinalForm = () => {
 
     for (const key in inputs) {
         const finalInput = finalForm.querySelector(`[name="final${capitalize(key)}"]`);
-        if (key === 'senderReceivingType') {
-            finalInput.value = inputs[key]?.id || '';
+        console.log(finalInput, inputs[key].value)
+        if (key === 'senderReceivingTypeStudio' || key === 'senderReceivingTypeEmail') {
+            finalInput.checked = inputs[key].checked; 
+            finalInput.value = inputs[key].value;
         } else if (finalInput) {
             finalInput.value = inputs[key].value;
         }
@@ -451,6 +550,7 @@ const fillFinalForm = () => {
     if (finalCard) {
         const cardImg = finalCard.querySelector('.final-page__card-img');
         const cardTitle = finalCard.querySelector('.final-page__card-title');
+        const cardPrice = finalCard.querySelector('.final-page__card-price-text');
 
         if (cardImg) {
             cardImg.src = selectedImageSrc || './assets/images/design-page/slide-img-2.png';
@@ -458,6 +558,12 @@ const fillFinalForm = () => {
 
         if (cardTitle) {
             cardTitle.textContent = inputs.text.value || '';
+        }
+
+        if (cardPrice) {
+            const certificateValue = sessionStorage.getItem('certificateValue') || 0;
+            const formattedValue = formatNumber(certificateValue);
+            cardPrice.textContent = `${formattedValue}`;
         }
     }
 
@@ -474,6 +580,121 @@ const fillFinalForm = () => {
     }
 
     console.log('Значения успешно подставлены в финальную форму');
+};
+
+const formatNumber = (num) => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+// Валидация полей отправителя
+const validateSenderFields = () => {
+    let isValid = true;
+
+    // Проверяем только поля отправителя
+    const senderInputs = {
+        senderName: inputs.senderName,
+        senderEmail: inputs.senderEmail,
+        senderCity: inputs.senderCity,
+        senderReceivingTypeStudio: inputs.senderReceivingTypeStudio,
+        senderReceivingTypeEmail: inputs.senderReceivingTypeEmail,
+    };
+
+    for (const key in senderInputs) {
+        const input = senderInputs[key];
+        if (!input) continue;
+
+        if (!validateField(input)) {
+            isValid = false;
+        }
+    }
+
+    if (!inputs.senderReceivingTypeStudio.checked && !inputs.senderReceivingTypeEmail.checked) {
+        document.querySelector(".data-page-one__checkbox-error").innerHTML = 'Не выбран способ получения сертификата!';
+        isValid = false;
+
+        document.querySelector(".data-page-one__checkbox-error").style.display = 'block';
+        inputs.senderReceivingTypeStudio.parentElement.classList.add('invalid');
+        inputs.senderReceivingTypeEmail.parentElement.classList.add('invalid');
+    } else {
+        document.querySelector(".data-page-one__checkbox-error").style.display = 'none';
+        inputs.senderReceivingTypeStudio.parentElement.classList.remove('invalid');
+        inputs.senderReceivingTypeEmail.parentElement.classList.remove('invalid');
+    }
+
+    return isValid;
+};
+
+// Валидация полей получателя
+const validateRecipientFields = () => {
+    let isValid = true;
+
+    // Проверяем только поля получателя
+    const recipientInputs = {
+        recipientName: inputs.recipientName,
+        recipientPhone: inputs.recipientPhone,
+        recipientCity: inputs.recipientCity,
+    };
+
+    for (const key in recipientInputs) {
+        const input = recipientInputs[key];
+        if (!input) continue;
+
+        if (!validateField(input)) {
+            isValid = false;
+        }
+    }
+
+    return isValid;
+};
+
+const validateField = (input) => {
+    const value = input.value.trim();
+    let isValid = true;
+
+    // Убираем класс .invalid перед проверкой
+    input.classList.remove('invalid');
+
+    // Проверка на пустое поле
+    if (value === '') {
+        isValid = false;
+    }
+
+    // Проверка для поля name (без цифр)
+    if (input.id === 'senderName' || input.id === 'recipientName') {
+        if (/\d/.test(value)) {
+            isValid = false;
+        }
+    }
+
+    // Проверка для email (наличие @ и домена)
+    if (input.id === 'senderEmail') {
+        if (!/@/.test(value) || !value.includes('.') || value.indexOf('@') === 0 || value.indexOf('@') === value.length - 1) {
+            isValid = false;
+        }
+    }
+
+    if (input.id === 'recipientPhone') {
+        if (value === '') {
+            isValid = false;
+        }
+    }
+
+    input.dataset.originalPlaceholder = input.placeholder;
+
+    // Если поле невалидно, добавляем класс .invalid и обновляем placeholder
+    if (!isValid) {
+        input.classList.add('invalid');
+
+        // Если placeholder ещё не содержит текст (обязательно), добавляем его
+        if (!input.dataset.placeholderChanged) {
+            input.placeholder += ' (обязательно)';
+            input.dataset.placeholderChanged = true; // Устанавливаем флаг, что placeholder был изменён
+        }
+    } else {
+        // Если поле стало валидным, сбрасываем флаг и восстанавливаем исходный placeholder
+        input.dataset.placeholderChanged = false;
+        input.placeholder = input.dataset.originalPlaceholder || input.placeholder; // Восстанавливаем исходный placeholder
+    }
+
+    return isValid;
 };
 
 window.addEventListener('beforeunload', function () {

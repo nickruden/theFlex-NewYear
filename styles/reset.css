@@ -33,6 +33,14 @@
     font-weight: 400;
 }
 
+@font-face {
+    font-family: "RoslindaleCyrillicDeckNarrow";  
+    src: url("../assets/fonts/RoslindaleCyrillicDeckNarrow/RoslindaleCyrillicDeckNarrow-Italic.woff") format("woff"),
+    url("../assets/fonts/RoslindaleCyrillicDeckNarrow/RoslindaleCyrillicDeckNarrow-Italic.woff2") format("woff2"); 
+    font-style: italic; 
+    font-weight: 400;
+}
+
 
 html,
 body {
@@ -166,19 +174,19 @@ button {
 }
 
 .my-input.invalid {
-    color: red;
+    color: #fa6363;
     border-color: red;
-    box-shadow: 0 0 5px red;
+    box-shadow: 0 0 10px red;
 }
 
 .my-input.invalid::placeholder {
-    color: red;
+    color: #fa6363de;
 }
 
 .validation-field {
     display: inline-block;
-    color: red;
+    color: #fa6363;
     font-size: 12px;
-    margin-top: 7px;
+    margin-top: 2px;
     margin-bottom: 15px;
 }
