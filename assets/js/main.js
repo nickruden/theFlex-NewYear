@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 designSwiper.slideTo(sessionStorage.getItem('activeSlideIndex') - 1 || 0, 0);
                 console.log("переход к слайду(назад):", sessionStorage.getItem('activeSlideIndex'))
             } else if (currentStep === 2) {
-                const savedPrice = sessionStorage.getItem('priceValue');
+                const savedPrice = sessionStorage.getItem('certificateValue');
                 console.log(1, savedPrice)
                 updatePrice(savedPrice);
                 const priceButtons = document.querySelectorAll('.amount-page__price-button');
@@ -355,8 +355,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const priceInput = document.getElementById('priceInput');
         let selectedPrice;
 
-        if (sessionStorage.getItem('priceValue')) {
-            const savedPrice = sessionStorage.getItem('priceValue');
+        if (sessionStorage.getItem('certificateValue')) {
+            const savedPrice = sessionStorage.getItem('certificateValue');
             updatePrice(savedPrice);
             const priceButtons = document.querySelectorAll('.amount-page__price-button');
             priceButtons.forEach(button => {
@@ -390,12 +390,12 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     
         const bonusPrice = bonusMap[price];
-    
-        priceInput.value = +price;
-        sessionStorage.setItem('priceValue', priceInput.value);
+
     
         certificateValue = +price;
         nominalValue = +price + bonusPrice;
+        priceInput.value = nominalValue;
+        sessionStorage.setItem('priceValue', priceInput.value);
     
         document.getElementById('certificate-value').textContent = `${formatNumber(certificateValue)}₽`;
         document.getElementById('bonuses-value').textContent = `+${formatNumber(bonusPrice)}₽`;
@@ -522,7 +522,7 @@ function checkCheckboxes() {
 
 // Функция для подстановки значений в финальную форму
 const fillFinalForm = () => {
-    const finalForm = document.getElementById('finalForm');
+    const finalForm = document.querySelector('.uc-form');
 
     if (!finalForm) {
         console.error('Финальная форма не найдена');
@@ -536,10 +536,11 @@ const fillFinalForm = () => {
     for (const key in inputs) {
         const finalInput = finalForm.querySelector(`[name="final${capitalize(key)}"]`);
         console.log(finalInput, inputs[key].value)
+
         if (key === 'senderReceivingTypeStudio' || key === 'senderReceivingTypeEmail') {
-            finalInput.checked = inputs[key].checked; 
-            finalInput.value = inputs[key].value;
-            console.log(inputs[key].checked)
+            finalInput.checked = inputs[key].checked;
+            finalInput.value = inputs[key].checked ? true : false;
+            console.log(inputs[key].checked);
         } else if (finalInput) {
             finalInput.value = inputs[key].value;
         }
@@ -562,6 +563,7 @@ const fillFinalForm = () => {
 
         if (cardPrice) {
             const certificateValue = sessionStorage.getItem('certificateValue') || 0;
+            console.log(certificateValue, sessionStorage.getItem('certificateValue'));
             const formattedValue = formatNumber(certificateValue);
             cardPrice.textContent = `${formattedValue}`;
         }

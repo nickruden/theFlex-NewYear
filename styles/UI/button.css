@@ -45,7 +45,7 @@
 
 .back-button {
     display: inline;
-    font-size: 8px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 10px;
     letter-spacing: -.02em;
@@ -53,7 +53,7 @@
     background: transparent;
 }
 
-@media (min-height: 500px) and (max-height: 645px) {
+@media (max-height: 645px) {
     .my-button {
         width: 190px;
         height: 39px;
@@ -64,5 +64,11 @@
     
     .my-button__inner-background {
         border-radius: 88px;
+    }
+}
+
+@media (max-height: 550px) {
+    .back-button {
+        font-size: 10px;
     }
 }

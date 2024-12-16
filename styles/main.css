@@ -151,7 +151,7 @@
 }
 .inner-page__body {
     padding-top: 42px;
-    padding-bottom: 21px;
+    padding-bottom: 13px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -172,20 +172,27 @@
 .inner-page__buttons {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 14px;
 }
 
-@media (min-height: 500px) and (max-height: 550px) {
-    .inner-page__body {
-        padding-top: 33px;
-        padding-bottom: 14px;
+@media (max-height: 700px) {
+
+}
+@media (max-height: 645px) {
+    .inner-page__buttons {
+        gap: 12px;
+    }
+}
+@media (max-height: 550px) {
+    .inner-page__buttons {
+        gap: 10px;
     }
 }
 
 
 /* СТРАНИЦА ВЫБОРА ДИЗАЙНА */
 .design-page {
-    padding: 52px 0px 33px 0px;
+    padding: 52px 0px 53px 0px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -239,7 +246,12 @@
 .design__swiper-button-next {
 }
 
-@media (min-height: 500px) and (max-height: 645px) {
+@media (max-height: 700px) {
+    .design-page {
+        padding: 45px 0px 39px 0px;
+    }
+}
+@media (max-height: 645px) {
     .design-page {
         padding: 30px 0px 22px 0px;
         width: 100%;
@@ -282,7 +294,7 @@
 
 /* СТРАНИЦА ВЫБОРА ТЕКСТА */
 .text-page {
-    padding: 32px 0px 37px 0px;
+    padding: 42px 0px 31px 0px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -345,16 +357,16 @@
 }
 .text-page__card {
     margin-top: 31px;
-    max-width: 173px;
-    max-height: 301px;
+    max-width: 183px;
+    max-height: 317px;
     padding: 4px;
     background: #FCFCFC;
     border-radius: 14px;
     position: relative;
 }
 .text-page__card-wrap-img {
-    width: 165px;
-    height: 293px;
+    width: 173px;
+    height: 308px;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -379,7 +391,7 @@
 
 @media (max-height: 700px) {
     .text-page {
-        padding: 42px 0px 26px 0px;
+        padding: 42px 0px 31px 0px;
     }
     .text-page__card {
         margin-top: 25px;
@@ -391,7 +403,7 @@
         height: 281px;
     }
     .text-page__card-title {
-        font-size: 24px;
+        font-size: 26px;
         top: 48px;
         width: 150px;
     }
@@ -407,8 +419,16 @@
     .text-page {
         padding: 14px 0px 17px 0px;
     }
+    .inner-page__body {
+        padding-top: 32px;
+        padding-bottom: 13px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     .text-page__card {
-        margin-top: 23px;
+        margin-top: 20px;
         max-width: 144px;
         max-height: 250px;
     }
@@ -539,7 +559,7 @@
 
 /* СТРАНИЦА ВВОДА ВАШИХ ДАННЫХ */
 .data-page-one {
-    padding: 55px 0px 128px 0px;
+    padding: 55px 0px 143px 0px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -582,7 +602,7 @@
 
 @media (max-height: 700px) {
     .data-page-one {
-        padding: 55px 0px 107px 0px;
+        padding: 55px 0px 94px 0px;
     }
 }
 
@@ -592,14 +612,14 @@
 
 @media (max-height: 550px) {
     .data-page-one {
-        padding: 35px 0px 38px 0px;
+        padding: 35px 0px 32px 0px;
     }
 }
 
 
 /* СТРАНИЦА ВВОДА ДАННЫХ ПОЛУЧАТЕЛЯ */
 .data-page-two {
-    padding: 55px 0px 198px 0px;
+    padding: 55px 0px 217px 0px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -750,9 +770,9 @@
 }
 .final-page__card {
     margin-bottom: 28px;
-    max-width: 243px;
-    max-height: 425px;
-    padding: 4px;
+    width: 251px;
+    height: 437px;
+    padding: 5px;
     background: #FFF;
     border-radius: 18px;
     position: relative;
@@ -762,24 +782,13 @@
     border-radius: 14px;
 }
 .final-page__card-content {
-    /* filter: blur(3px); */
     position: relative;
     overflow: hidden;
     border-radius: 14px;
 }
-.final-page__card-content::after {
-    content: '';
-    display: block;
+.final-page__card-wrap-img {
     width: 100%;
     height: 100%;
-    background: rgba(217, 217, 217, 0.2);
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-.final-page__card-wrap-img {
-    width: 234px;
-    height: 417px;
 }
 .final-page__card-img {
     width: 100%;
@@ -787,6 +796,7 @@
     object-fit: cover;
 }
 .final-page__card-title {
+    font-family: 'PPEditorialNew';
     font-style: italic;
     font-size: 31px;
     line-height: 90%;
@@ -800,8 +810,8 @@
 }
 .final-page__card-price {
     position: absolute;
-    bottom: 107px;
-    right: 38px;
+    bottom: 112px;
+    right: 41px;
     display: flex;
     gap: 2px;
 }
@@ -846,16 +856,15 @@
         padding: 55px 0px 24px 0px;
     }
     .final-page__card {
-        margin-bottom: 42px;
-        max-width: 208px;
-        max-height: 363px;
-        padding: 3px;
+        margin-bottom: 26px;
+        width: 228px;
+        height: 397px;
         border-radius: 16px;
     }
     .final-page__card-wrap-img {
-        width: 200px;
-        height: 356px;
-        border-radius: 11px;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
     }
     .final-page__card-title {
         font-size: 27px;
@@ -864,8 +873,8 @@
     }
     .final-page__card-price {
         position: absolute;
-        bottom: 91px;
-        right: 27px;
+        bottom: 98px;
+        right: 31px;
         display: flex;
         gap: 2px;
     }
@@ -880,13 +889,14 @@
     }
     .final-page__card {
         margin-bottom: 19px;
-        max-width: 181px;
-        max-height: 316px;
+        width: 183px;
+        height: 320px;
+        padding: 4px;
         border-radius: 14px;
     }
     .final-page__card-wrap-img {
-        width: 173px;
-        height: 310px;
+        width: 100%;
+        height: 100%;
         border-radius: 10px;
     }
     .final-page__card-title {
@@ -895,7 +905,7 @@
         width: 159px;
     }
     .final-page__card-price {
-        bottom: 76px;
+        bottom: 75px;
         right: 31px;
     }
     .final-page__card-price-text {
