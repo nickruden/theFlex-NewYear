@@ -112,10 +112,8 @@ const selectDesign = () => {
     console.log("сохранённый индекс:", sessionStorage.getItem('activeSlideIndex'))
 
     const cardTitle = document.querySelector('.text-page__card-title');
-    const finalCardTitle = document.querySelector('.final-page__card-title');
-    if (dataDesign === '1') {
+    if (dataDesign == 1) {
         cardTitle.style.color = '#4C4B4B';
-        finalCardTitle.style.color = '#4C4B4B';
     } else {
         cardTitle.style.color = '';
     }
@@ -552,6 +550,9 @@ const fillFinalForm = () => {
         const cardImg = finalCard.querySelector('.final-page__card-img');
         const cardTitle = finalCard.querySelector('.final-page__card-title');
         const cardPrice = finalCard.querySelector('.final-page__card-price-text');
+        if (inputs.design.value == '1') {
+            cardTitle.style.color = '#4C4B4B';
+        }
 
         if (cardImg) {
             cardImg.src = selectedImageSrc || './assets/images/design-page/slide-img-2.png';
