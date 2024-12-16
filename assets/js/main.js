@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updatePrice(price) {
         const bonusMap = {
-            '5000': 2000,
+            '5': 2,
             '7000': 3000,
             '10000': 5000
         };
@@ -575,7 +575,7 @@ const fillFinalForm = () => {
         const nominalValue = sessionStorage.getItem('nominalValue') || 0;
 
         // Формируем ссылку
-        const link = `#order:Сертификат ${certificateValue}=${nominalValue}`;
+        const link = `#order:Сертификат ${nominalValue}=${certificateValue}`;
         button.setAttribute('href', link);
 
         console.log(button)
