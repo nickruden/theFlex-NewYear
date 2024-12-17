@@ -383,6 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updatePrice(price) {
         const bonusMap = {
             '5': 2,
+            '5000': 2000,
             '7000': 3000,
             '10000': 5000
         };
@@ -549,7 +550,9 @@ const fillFinalForm = () => {
     if (finalCard) {
         const cardImg = finalCard.querySelector('.final-page__card-img');
         const cardTitle = finalCard.querySelector('.final-page__card-title');
-        const cardPrice = finalCard.querySelector('.final-page__card-price-text');
+        const cardPrices = finalCard.querySelectorAll('.final-page__card-price');;
+
+
         if (inputs.design.value == '1') {
             cardTitle.style.color = '#4C4B4B';
         }
@@ -562,12 +565,17 @@ const fillFinalForm = () => {
             cardTitle.textContent = inputs.text.value || '';
         }
 
-        if (cardPrice) {
-            const certificateValue = sessionStorage.getItem('certificateValue') || 0;
-            console.log(certificateValue, sessionStorage.getItem('certificateValue'));
-            const formattedValue = formatNumber(certificateValue);
-            cardPrice.textContent = `${formattedValue}`;
-        }
+        const certificateValue = sessionStorage.getItem('certificateValue') || 0;
+        console.log(certificateValue, sessionStorage.getItem('certificateValue'));
+        
+        cardPrices.forEach(priceElement => {
+            const priceData = priceElement.getAttribute('data-price');
+            if (certificateValue == priceData) {
+                priceElement.style.display = 'block';
+            } else {
+                priceElement.style.display = 'none';
+            }
+        });
     }
 
     const button = document.querySelector('.final-page__button');

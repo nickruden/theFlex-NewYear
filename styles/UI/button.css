@@ -32,11 +32,11 @@
 .my-button__inner-background::after {
     content: '';
     position: absolute;
-    top: 0;
+    top: -7px;
     left: 0;
     display: block;
     width: 100%;
-    height: 100%;
+    height: 120%;
     background: #587EA7;
     border-radius: 100px/30px;
     filter: blur(17px);

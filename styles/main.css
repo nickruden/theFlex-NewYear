@@ -231,6 +231,20 @@
     padding: 5px;
     overflow: hidden;
 }
+.design__swiper-slide.swiper-slide-active .design__slide-img-wrap::after {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: block;
+    width: 110%;
+    height: 115%;
+    background: #587EA7;
+    border-radius: 214px / 157px;
+    filter: blur(23px);
+    z-index: -1;
+}
 .design__slide-img {
     height: 100%;
     width: 100%;
@@ -446,7 +460,7 @@
 
 /* СТРАНИЦА ВЫБОРА НОМИНАЛА */
 .amount-page {
-    padding: 62px 0px 79px 0px;
+    padding: 32px 0px 51px 0px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -459,12 +473,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 62px;
+    margin-bottom: 57px;
 }
 .amount-page__price-buttons {
     display: flex;
     gap: 8px;
-    margin-bottom: 32px;
+    flex-wrap: wrap;
+    max-width: 218px;
+    margin-bottom: 16px;
 }
 .amount-page__price-button {
     width: 105px;
@@ -506,37 +522,58 @@
     width: 100%;
 }
 .amount-page__description {
-    padding: 10px 0px;
+    padding: 12px 0px;
     border-top: 1px solid #9C9C9C;
 }
-.amount-page__description:last-child {
-    padding-top: 14px;
+.amount-page__description:nth-of-type(2) {
+    padding-bottom: 14px;
 }
 .amount-page__description-item {
     display: flex;
     justify-content: space-between;
 }
 .amount-page__description-item:not(:last-child) {
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 .amount-page__description-item-text {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 16px;
 }
 .amount-page__description-item-img-wrap {
     display: inline-block;
-    margin-left: 4px;
+    margin-left: 7px;
     max-height: 11px;
     max-width: 10px;
 }
-.amount-page__description:last-child .amount-page__description-item-text {
-    font-size: 16px;
+.amount-page__description:nth-of-type(2) .amount-page__description-item-text {
+    font-size: 18px;
     line-height: 16px;
 }
 
 @media (max-height: 700px) {
     .amount-page {
-        padding: 62px 0px 48px 0px;
+        padding: 32px 0px 37px 0px;
+    }
+    .amount-page__prices {
+        margin-bottom: 34px;
+    }
+    .amount-page__description {
+        padding: 10px 0px;
+    }
+    .amount-page__description:nth-of-type(2) {
+        padding-bottom: 10px;
+    }
+    .amount-page__description-item:not(:last-child) {
+        margin-bottom: 4px;
+    }
+    .amount-page__description-item-text {
+        font-size: 12px;
+    }
+    .amount-page__description-item-img-wrap {
+        margin-left: 4px;
+    }
+    .amount-page__description:nth-of-type(2) .amount-page__description-item-text {
+        font-size: 16px;
     }
 }
 
@@ -546,13 +583,33 @@
 
 @media (max-height: 550px) {
     .amount-page {
-        padding: 40px 0px 28px 0px;
+        padding: 15px 0px 12px 0px;
     }
     .amount-page__prices {
-        margin-bottom: 31px;
+        margin-bottom: 13px;
     }
     .amount-page__price-buttons {
-        margin-bottom: 17px;
+        gap: 7px;
+        flex-wrap: wrap;
+        max-width: 198px;
+        margin-bottom: 9px;
+    }
+    .amount-page__price-button {
+        width: 94px;
+        height: 73px;
+        border-radius: 9px;
+    }
+    .amount-page__price-button-inner-background {
+        font-size: 18px;
+    }
+    .amount-page__description-item-text {
+        font-size: 12px;
+    }
+    .amount-page__description-item-img-wrap {
+        margin-left: 4px;
+    }
+    .amount-page__description:last-child {
+        padding-top: 8px;
     }
 }
 
@@ -808,14 +865,21 @@
     transform: translateX(-50%);
     width: 210px;
 }
-.final-page__card-price {
+.final-page__card-price-wrap {
     position: absolute;
-    bottom: 112px;
-    right: 41px;
+    bottom: 109px;
+    right: 44px;
     display: flex;
     gap: 2px;
 }
-.final-page__card-price-text {
+.final-page__card-price {
+    max-width: 50px;
+}
+.final-page__card-price svg {
+    height: 100%;
+    width: 100%;
+}
+/* .final-page__card-price-text {
     font-family: 'RoslindaleCyrillicDeckNarrow';
     font-style: italic;
     font-size: 16px;
@@ -829,7 +893,7 @@
 .final-page__card-price-ruble svg {
     width: 100%;
     height: 100%;
-}
+} */
 .final-page__buttons {
     margin-bottom: 23px;
 }
@@ -871,12 +935,12 @@
         top: 51px;
         width: 181px;
     }
-    .final-page__card-price {
-        position: absolute;
+    .final-page__card-price-wrap {
         bottom: 98px;
-        right: 31px;
-        display: flex;
-        gap: 2px;
+        right: 41px;
+    }
+    .final-page__card-price {
+        max-width: 46px;
     }
 }
 
@@ -904,16 +968,12 @@
         top: 41px;
         width: 159px;
     }
+    .final-page__card-price-wrap {
+        bottom: 79px;
+        right: 32px;
+    }
     .final-page__card-price {
-        bottom: 75px;
-        right: 31px;
-    }
-    .final-page__card-price-text {
-        font-size: 12px;
-    }
-    .final-page__card-price-ruble {
-        max-width: 7px;
-    max-height: 10px;
+        max-width: 41px;
     }
     .final-page__buttons {
         margin-bottom: 16px;
