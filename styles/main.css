@@ -863,7 +863,7 @@
     top: 59px;
     left: 50%;
     transform: translateX(-50%);
-    width: 210px;
+    width: 197px;
 }
 .final-page__card-price-wrap {
     position: absolute;
@@ -933,7 +933,7 @@
     .final-page__card-title {
         font-size: 27px;
         top: 51px;
-        width: 181px;
+        width: 172px;
     }
     .final-page__card-price-wrap {
         bottom: 98px;
@@ -966,7 +966,7 @@
     .final-page__card-title {
         font-size: 24px;
         top: 41px;
-        width: 159px;
+        width: 153px;
     }
     .final-page__card-price-wrap {
         bottom: 79px;

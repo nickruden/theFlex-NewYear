@@ -565,12 +565,12 @@ const fillFinalForm = () => {
             cardTitle.textContent = inputs.text.value || '';
         }
 
-        const certificateValue = sessionStorage.getItem('certificateValue') || 0;
-        console.log(certificateValue, sessionStorage.getItem('certificateValue'));
+        const nominalValue = sessionStorage.getItem('nominalValue') || 0;
+        console.log(nominalValue, sessionStorage.getItem('nominalValue'));
         
         cardPrices.forEach(priceElement => {
-            const priceData = priceElement.getAttribute('data-price');
-            if (certificateValue == priceData) {
+            const priceData = priceElement.getAttribute('data-nominal');
+            if (nominalValue == priceData) {
                 priceElement.style.display = 'block';
             } else {
                 priceElement.style.display = 'none';
