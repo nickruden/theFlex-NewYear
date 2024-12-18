@@ -14,12 +14,23 @@ const inputs = {
     senderName: document.getElementById('senderName'),
     senderEmail: document.getElementById('senderEmail'),
     senderCity: document.getElementById('senderCity'),
-    senderReceivingTypeStudio: document.getElementById('receivingStudio'),
-    senderReceivingTypeEmail: document.getElementById('receivingEmail'),
+    senderReceivingType: document.querySelector('input[name="senderReceivingType"]:checked') || '',
     recipientName: document.getElementById('recipientName'),
     recipientPhone: document.getElementById('recipientPhone'),
     recipientCity: document.getElementById('recipientCity'),
 };
+
+
+const metaViewport = document.querySelector('meta[name="viewport"]');
+
+if (metaViewport) {
+    metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+} else {
+    const newMeta = document.createElement('meta');
+    newMeta.name = 'viewport';
+    newMeta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    document.head.appendChild(newMeta);
+}
 
 const initPhoneMask = (phoneInput) => {
     const initialMask = '+7 (';
@@ -248,8 +259,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
-            inputs.senderReceivingTypeStudio.addEventListener('change', checkCheckboxes);
-            inputs.senderReceivingTypeEmail.addEventListener('change', checkCheckboxes);
+            document.querySelectorAll('input[name="senderReceivingType"]').forEach((radio) => {
+                radio.addEventListener('change', checkRadioButtons);
+            });
         }
 
         if (block.classList.contains('data-page-two')) {
@@ -303,6 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
             innerPage.style.display = 'none';
+            inputs.senderReceivingType = document.querySelector('input[name="senderReceivingType"]:checked');
             loadingPage.style.display = 'block';
             fillFinalForm();
             setTimeout(() => {
@@ -409,8 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
         senderName: '',
         senderEmail: '',
         senderCity: '',
-        senderReceivingTypeStudio: '',
-        senderReceivingTypeEmail: '',
+        senderReceivingType: '',
     };
     
     let recipientFormData = {
@@ -427,8 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
             senderFormData.senderName = form.querySelector('#senderName').value;
             senderFormData.senderEmail = form.querySelector('#senderEmail').value;
             senderFormData.senderCity = form.querySelector('#senderCity').value;
-            senderFormData.senderReceivingTypeStudio = inputs.senderReceivingTypeStudio.checked;
-            senderFormData.senderReceivingTypeEmail = inputs.senderReceivingTypeEmail.checked;
+            senderFormData.senderReceivingType = form.querySelector('input[name="senderReceivingType"]:checked')?.id || '';
             sessionStorage.setItem('senderFormData', JSON.stringify(senderFormData));
         }
     
@@ -442,8 +453,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 form.querySelector('#senderEmail').value = senderFormData.senderEmail;
                 form.querySelector('#senderCity').value = senderFormData.senderCity;
 
-                inputs.senderReceivingTypeStudio.checked = senderFormData.senderReceivingTypeStudio || false;
-                inputs.senderReceivingTypeEmail.checked = senderFormData.senderReceivingTypeEmail || false;
+                if (senderFormData.senderReceivingType) {
+                    form.querySelector(`#${senderFormData.senderReceivingType}`).checked = true;
+                }
             }
         }
     
@@ -452,9 +464,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 saveFormData();
             }
         });
-    
+
         form.addEventListener('change', function (event) {
-            if (event.target.id === 'senderCity' || event.target.name === 'senderReceivingTypeStudio' || event.target.name === 'senderReceivingTypeEmail') {
+            if (event.target.id === 'senderCity' || event.target.name === 'senderReceivingType') {
                 saveFormData();
             }
         });
@@ -506,18 +518,25 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function checkCheckboxes() {
-    if (!inputs.senderReceivingTypeStudio.checked && !inputs.senderReceivingTypeEmail.checked) {
-        document.querySelector(".data-page-one__checkbox-error").innerHTML = 'Не выбран способ получения сертификата!';
-        document.querySelector(".data-page-one__checkbox-error").style.display = 'block';
-        inputs.senderReceivingTypeStudio.parentElement.classList.add('invalid');
-        inputs.senderReceivingTypeEmail.parentElement.classList.add('invalid');
-    } else {
-        document.querySelector(".data-page-one__checkbox-error").style.display = 'none';
-        inputs.senderReceivingTypeStudio.parentElement.classList.remove('invalid');
-        inputs.senderReceivingTypeEmail.parentElement.classList.remove('invalid');
+const checkRadioButtons = () => {
+    const radioButtons = document.querySelectorAll('input[name="senderReceivingType"]');
+    let isRadioSelected = false;
+
+    // Проверяем, выбрана ли хотя бы одна радиокнопка
+    radioButtons.forEach((radio) => {
+        if (radio.checked) {
+            isRadioSelected = true;
+        }
+    });
+
+    // Если радиокнопка выбрана, скрываем ошибку и удаляем класс invalid
+    if (isRadioSelected) {
+        document.querySelector(".data-page-one__radio-error").style.display = 'none';
+        radioButtons.forEach((radio) => {
+            radio.parentElement.classList.remove('invalid');
+        });
     }
-}
+};
 
 // Функция для подстановки значений в финальную форму
 const fillFinalForm = () => {
@@ -536,10 +555,14 @@ const fillFinalForm = () => {
         const finalInput = finalForm.querySelector(`[name="final${capitalize(key)}"]`);
         console.log(finalInput, inputs[key].value)
 
-        if (key === 'senderReceivingTypeStudio' || key === 'senderReceivingTypeEmail') {
-            finalInput.checked = inputs[key].checked;
-            finalInput.value = inputs[key].checked ? true : false;
-            console.log(inputs[key].checked);
+        if (inputs[key].checked) {
+            if (inputs[key].id == 'receivingStudio') {
+                finalInput.value = 'studio';
+                console.log(inputs[key], finalInput.value);
+            } else if (inputs[key].id == 'receivingEmail') {
+                finalInput.value = 'email';
+                console.log(inputs[key], finalInput.value);
+            }
         } else if (finalInput) {
             finalInput.value = inputs[key].value;
         }
@@ -604,8 +627,7 @@ const validateSenderFields = () => {
         senderName: inputs.senderName,
         senderEmail: inputs.senderEmail,
         senderCity: inputs.senderCity,
-        senderReceivingTypeStudio: inputs.senderReceivingTypeStudio,
-        senderReceivingTypeEmail: inputs.senderReceivingTypeEmail,
+        senderReceivingType: inputs.senderReceivingType,
     };
 
     for (const key in senderInputs) {
@@ -617,17 +639,28 @@ const validateSenderFields = () => {
         }
     }
 
-    if (!inputs.senderReceivingTypeStudio.checked && !inputs.senderReceivingTypeEmail.checked) {
-        document.querySelector(".data-page-one__checkbox-error").innerHTML = 'Не выбран способ получения сертификата!';
+    const radioButtons = document.querySelectorAll('input[name="senderReceivingType"]');
+    let isRadioSelected = false;
+
+    radioButtons.forEach((radio) => {
+        if (radio.checked) {
+            isRadioSelected = true;
+        }
+    });
+
+    if (!isRadioSelected) {
+        document.querySelector(".data-page-one__radio-error").innerHTML = 'Не выбран способ получения сертификата!';
         isValid = false;
 
-        document.querySelector(".data-page-one__checkbox-error").style.display = 'block';
-        inputs.senderReceivingTypeStudio.parentElement.classList.add('invalid');
-        inputs.senderReceivingTypeEmail.parentElement.classList.add('invalid');
+        document.querySelector(".data-page-one__radio-error").style.display = 'block';
+        radioButtons.forEach((radio) => {
+            radio.parentElement.classList.add('invalid');
+        });
     } else {
-        document.querySelector(".data-page-one__checkbox-error").style.display = 'none';
-        inputs.senderReceivingTypeStudio.parentElement.classList.remove('invalid');
-        inputs.senderReceivingTypeEmail.parentElement.classList.remove('invalid');
+        document.querySelector(".data-page-one__radio-error").style.display = 'none';
+        radioButtons.forEach((radio) => {
+            radio.parentElement.classList.remove('invalid');
+        });
     }
 
     return isValid;
