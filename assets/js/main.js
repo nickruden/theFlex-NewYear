@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updatePrice(price) {
         const bonusMap = {
-            '5': 2,
+            '4000': 1000,
             '5000': 2000,
             '7000': 3000,
             '10000': 5000
