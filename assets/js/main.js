@@ -12,6 +12,7 @@ const inputs = {
     text: document.getElementById('textCardInput'),
     price: document.getElementById('priceInput'),
     senderName: document.getElementById('senderName'),
+    senderPhone: document.getElementById('senderPhone'),
     senderEmail: document.getElementById('senderEmail'),
     senderCity: document.getElementById('senderCity'),
     senderReceivingType: document.querySelector('input[name="senderReceivingType"]:checked') || '',
@@ -262,6 +263,11 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('input[name="senderReceivingType"]').forEach((radio) => {
                 radio.addEventListener('change', checkRadioButtons);
             });
+
+            const senderPhoneInput = document.getElementById('senderPhone');
+            if (senderPhoneInput) {
+                initPhoneMask(senderPhoneInput);
+            }
         }
 
         if (block.classList.contains('data-page-two')) {
@@ -420,6 +426,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let senderFormData = {
         senderName: '',
+        senderPhone: '',
         senderEmail: '',
         senderCity: '',
         senderReceivingType: '',
@@ -437,6 +444,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Функция для сохранения данных формы
         function saveFormData() {
             senderFormData.senderName = form.querySelector('#senderName').value;
+            senderFormData.senderPhone = form.querySelector('#senderPhone').value;
             senderFormData.senderEmail = form.querySelector('#senderEmail').value;
             senderFormData.senderCity = form.querySelector('#senderCity').value;
             senderFormData.senderReceivingType = form.querySelector('input[name="senderReceivingType"]:checked')?.id || '';
@@ -450,6 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 senderFormData = JSON.parse(savedFormData);
 
                 form.querySelector('#senderName').value = senderFormData.senderName;
+                form.querySelector('#senderPhone').value = senderFormData.senderPhone;
                 form.querySelector('#senderEmail').value = senderFormData.senderEmail;
                 form.querySelector('#senderCity').value = senderFormData.senderCity;
 
@@ -460,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     
         form.addEventListener('input', function (event) {
-            if (event.target.id === 'senderName' || event.target.id === 'senderEmail') {
+            if (event.target.id === 'senderName' || event.target.id === 'senderEmail' || event.target.id === 'senderPhone') {
                 saveFormData();
             }
         });
@@ -625,6 +634,7 @@ const validateSenderFields = () => {
     // Проверяем только поля отправителя
     const senderInputs = {
         senderName: inputs.senderName,
+        senderPhone: inputs.senderPhone,
         senderEmail: inputs.senderEmail,
         senderCity: inputs.senderCity,
         senderReceivingType: inputs.senderReceivingType,
@@ -715,7 +725,7 @@ const validateField = (input) => {
         }
     }
 
-    if (input.id === 'recipientPhone') {
+    if (input.id === 'recipientPhone' || input.id === 'senderPhone') {
         if (value === '') {
             isValid = false;
         }

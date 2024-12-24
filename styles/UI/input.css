@@ -12,3 +12,12 @@
 .my-input::placeholder {
     color: #A3A3A3;
 }
+
+@media (max-height: 550px) {
+    .my-input {
+        padding: 12px 13px;
+        font-size: 14px;
+        line-height: 17px;
+        margin-bottom: 10px;
+    }
+}

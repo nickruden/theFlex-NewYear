@@ -32,3 +32,14 @@
     border-right: 6px solid transparent;
     border-top: 9px solid #343537;
 }
+
+@media (max-height: 550px) {
+    .my-select__element {
+        padding: 12px 13px;
+        font-size: 14px;
+        line-height: 17px;
+    }
+    .my-select-arrow {
+        top: 40%;
+    }
+}
